@@ -54,7 +54,7 @@ El frontend estará disponible en: http://localhost:5173/
 
 Cliente VIP cargado por seed:
 
-Documento: 900000000
+Documento: 1234
 
 Nombre: Pedro Pérez
 
