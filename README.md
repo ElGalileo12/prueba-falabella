@@ -43,6 +43,8 @@ cd frontend
 npm install
 npm run dev
 ```
+Crear un archivo .env y agregar la sigueinte variable de entorno 
+VITE_API_URL=http://127.0.0.1:8000/api
 
 El frontend estará disponible en: http://localhost:5173/
 
