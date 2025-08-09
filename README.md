@@ -36,6 +36,21 @@ python manage.py runserver
 
 El backend estará disponible en: http://127.0.0.1:8000/
 
+### Visualizar datos
+Abre un nuevo terminal
+
+```bash
+cd backend
+python manage.py shell
+from app.models import Client
+total = Client.objects.all()
+print(total)
+```
+### Visualizar datos en el navegador
+
+Abre el navegador el siguiente link http://127.0.0.1:8000/api/clients/search/?doc_number=1234
+Se puede cambiar el numero final por el Client que muestra en el print(total) para ver los datos de casa Cliente
+
 ### Frontend
 
 ```bash
@@ -43,8 +58,6 @@ cd frontend
 npm install
 npm run dev
 ```
-Crear un archivo .env y agregar la sigueinte variable de entorno 
-VITE_API_URL=http://127.0.0.1:8000/api
 
 El frontend estará disponible en: http://localhost:5173/
 

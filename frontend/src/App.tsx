@@ -18,6 +18,8 @@ interface Client {
   purchases: Purchase[];
 }
 
+const API_BASE = "http://localhost:8000/api"; // <-- pon aquí tu base real
+
 function App() {
   const [docNumber, setDocNumber] = useState("");
   const [client, setClient] = useState<Client | null>(null);
@@ -30,18 +32,26 @@ function App() {
     }
     setLoading(true);
     try {
-      const res = await fetch(
-        `${
-          import.meta.env.VITE_API_URL
-        }/clients/search/?doc_number=${docNumber}`
-      );
-      if (res.ok) {
-        const data = await res.json();
-        setClient(data);
-      } else {
+      const url = `${API_BASE}/clients/search/?doc_number=${encodeURIComponent(
+        docNumber
+      )}`;
+
+      const res = await fetch(url, { headers: { Accept: "application/json" } });
+
+      if (!res.ok) {
+        const text = await res.text();
+        console.error("Error HTTP:", res.status, text);
         setClient(null);
-        alert("Cliente no encontrado");
+        alert(
+          res.status === 404
+            ? "Cliente no encontrado"
+            : "Error consultando la API"
+        );
+        return;
       }
+
+      const data: Client = await res.json();
+      setClient(data);
     } catch (error) {
       console.error(error);
       alert("Error al buscar cliente");
@@ -52,17 +62,12 @@ function App() {
 
   const exportClient = () => {
     if (!client) return;
-    window.open(
-      `${import.meta.env.VITE_API_URL}/clients/${client.id}/export/`,
-      "_blank"
-    );
+    // endpoint con slash final para evitar redirecciones
+    window.open(`${API_BASE}/clients/${client.id}/export/`, "_blank");
   };
 
   const downloadFidelizados = () => {
-    window.open(
-      `${import.meta.env.VITE_API_URL}/reports/fidelizados/`,
-      "_blank"
-    );
+    window.open(`${API_BASE}/reports/fidelizados/`, "_blank");
   };
 
   return (
@@ -102,7 +107,7 @@ function App() {
           </ul>
 
           <h3>Exportar datos</h3>
-          <button onClick={() => exportClient()}>CSV</button>
+          <button onClick={exportClient}>CSV</button>
         </div>
       )}
 
